@@ -84,6 +84,21 @@ class HTTPClient(object):
 
     def close(self):
         self._connection_pool.close()
+        
+    def _strip_port(self, uri):
+        """
+        Strips ports from urls like http://mtred.com:8337/
+        """
+        if len(uri.split(':')) != 3:
+            #No Port or too many items
+            return uri
+        url = uri.split(':')
+        if len(ur[-1].split('/',1)) <2:
+            ur[-1] = ''
+        else:
+            url[-1] = '/' + url[-1].split('/', 1)[1]
+        url = url[0] + ':' + url[1] + url[2]
+        return url
 
     def _build_request(self, method, request_uri, body="", headers={}):
         header_fields = self.default_headers.copy()
@@ -97,7 +112,7 @@ class HTTPClient(object):
         if body:
             header_fields['Content-Length'] = str(len(body))
 
-        request_url = request_uri
+        request_url = self._strip_port(request_uri)
         if self.use_proxy:
             base_url = self._base_url_string
             if request_uri.startswith('/'):
