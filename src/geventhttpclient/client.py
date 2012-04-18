@@ -93,8 +93,8 @@ class HTTPClient(object):
             #No Port or too many items
             return uri
         url = uri.split(':')
-        if len(ur[-1].split('/',1)) <2:
-            ur[-1] = ''
+        if len(url[-1].split('/',1)) <2:
+            url[-1] = ''
         else:
             url[-1] = '/' + url[-1].split('/', 1)[1]
         url = url[0] + ':' + url[1] + url[2]
